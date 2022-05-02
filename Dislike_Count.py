@@ -11,7 +11,7 @@ def retrieve_data(id):
         return data
 
 # IDs of videos
-id_list = Playlist_Vid_Id_Getter.getVideoIdsFromPlaylist("https://www.youtube.com/playlist?list=PLWF14W8Rw2HBB9NBJ-avYD7fMlbvGdpz4")
+id_list = sorted(Playlist_Vid_Id_Getter.getVideoIdsFromPlaylist("https://www.youtube.com/playlist?list=PLWF14W8Rw2HBB9NBJ-avYD7fMlbvGdpz4"))
 
 #retrieves data from all vidoes and loads into data_array 
 data_array = []
