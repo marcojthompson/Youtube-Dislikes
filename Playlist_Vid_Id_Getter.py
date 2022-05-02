@@ -3,7 +3,7 @@
 import googleapiclient.discovery
 from urllib.parse import parse_qs, urlparse
 
-#extract playlist id from url
+# extract playlist id from url
 
 def getVideoIdsFromPlaylist(url):
     query = parse_qs(urlparse(url).query, keep_blank_values=True)
@@ -29,5 +29,5 @@ def getVideoIdsFromPlaylist(url):
     #print(videoIds)
     return videoIds
 
-#url = 'https://www.youtube.com/playlist?list=PLWF14W8Rw2HD_9TZTBCtGAwtvJDqDgosZ'
-#getVideoIdsFromPlaylist(url)
+# url = 'https://www.youtube.com/playlist?list=PLWF14W8Rw2HD_9TZTBCtGAwtvJDqDgosZ'
+# getVideoIdsFromPlaylist(url)
