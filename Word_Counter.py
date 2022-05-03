@@ -1,4 +1,4 @@
-# Credit: https://machinelearningmastery.com/develop-word-embeddings-python-gensim/
+#Script to get the total number of words, number of comments, and average number of words per comment
 import csv
 import os
 import re
@@ -8,7 +8,7 @@ from tqdm import tqdm
 number_of_comments = 0
 all_words = 0
 
-for file in tqdm(os.scandir("Comments-TechLead")):
+for file in tqdm(os.scandir("FileName")):
     # Do for all files in the folder
     with open(file) as file_obj:
         # ignore the heading

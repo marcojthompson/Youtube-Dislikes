@@ -4,14 +4,14 @@
 # Watch the youtube video for explaination
 # https://youtu.be/B9uCX2s7y7A
 import Playlist_Vid_Id_Getter
-api_key = "AIzaSyBa89b5AH1zvxTFtBfCVZdJ0DRB8Sg05qg" # Replace this dummy api key with your own.
-
-from apiclient.discovery import build
-youtube = build('youtube', 'v3', developerKey=api_key)
-
 import pandas as pd
 import re
 from string import ascii_letters
+from apiclient.discovery import build
+
+api_key = "API-KEY" # Replace this dummy api key with your own.
+
+youtube = build('youtube', 'v3', developerKey=api_key)
 
 def scrape_comments_with_replies(ID):
     box = [['Comment', 'Likes', 'Reply Count']]
@@ -19,11 +19,10 @@ def scrape_comments_with_replies(ID):
     data = youtube.commentThreads().list(part='snippet', videoId=ID, maxResults='100', textFormat="plainText").execute()
 
     for i in data["items"]:
+        #to limit the number of top level comments collected per video to 1000
         if len(box) > 1001:
             break
-        #name = i["snippet"]['topLevelComment']["snippet"]["authorDisplayName"]
         comment = re.sub('[^a-zA-Z0-9]', " ", i["snippet"]['topLevelComment']["snippet"]["textDisplay"])
-        #published_at = i["snippet"]['topLevelComment']["snippet"]['publishedAt']
         likes = i["snippet"]['topLevelComment']["snippet"]['likeCount']
         replies = i["snippet"]['totalReplyCount']
 
@@ -41,9 +40,7 @@ def scrape_comments_with_replies(ID):
                                             textFormat="plainText").execute()
 
             for i in data2["items"]:
-                #name = i["snippet"]["authorDisplayName"]
                 comment = re.sub('[^a-zA-Z0-9]', " ", i["snippet"]["textDisplay"])
-                #published_at = i["snippet"]['publishedAt']
                 likes = i["snippet"]['likeCount']
                 replies = ""
 
@@ -57,11 +54,10 @@ def scrape_comments_with_replies(ID):
                                              maxResults='100', textFormat="plainText").execute()
 
         for i in data["items"]:
+            #to limit the number of top level comments collected per video to 1000
             if len(box) > 1001:
                 break
-            #name = i["snippet"]['topLevelComment']["snippet"]["authorDisplayName"]
             comment = re.sub('[^a-zA-Z0-9]', " ", i["snippet"]['topLevelComment']["snippet"]["textDisplay"])
-            #published_at = i["snippet"]['topLevelComment']["snippet"]['publishedAt']
             likes = i["snippet"]['topLevelComment']["snippet"]['likeCount']
             replies = i["snippet"]['totalReplyCount']
 
@@ -79,9 +75,7 @@ def scrape_comments_with_replies(ID):
                                                 textFormat="plainText").execute()
 
                 for i in data2["items"]:
-                    #name = i["snippet"]["authorDisplayName"]
                     comment = re.sub('[^a-zA-Z0-9]', " ", i["snippet"]["textDisplay"])
-                    #published_at = i["snippet"]['publishedAt']
                     likes = i["snippet"]['likeCount']
                     replies = ''
 
@@ -91,33 +85,13 @@ def scrape_comments_with_replies(ID):
 
     df = pd.DataFrame({'Comment': [i[0] for i in box], 'likes': [i[1] for i in box], 'Reply Count': [i[2] for i in box]})
 
-    df.to_csv(path_or_buf="Comments-TechLead/" + str(ID) + '.csv', index=False, header=False)
+    df.to_csv(path_or_buf="FileName/" + str(ID) + '.csv', index=False, header=False)
 
-    return "Successful! Check the CSV file that you have just created."
-
-
-VideoIds = Playlist_Vid_Id_Getter.getVideoIdsFromPlaylist("https://www.youtube.com/playlist?list=PLWF14W8Rw2HBB9NBJ-avYD7fMlbvGdpz4")
+    return "Success!"
 
 
-#Run in increments
+VideoIds = Playlist_Vid_Id_Getter.getVideoIdsFromPlaylist("Playlist-Link")
+
+
 for i in VideoIds:
     scrape_comments_with_replies(i)
-"""
-for i in range(50, 100):
-    scrape_comments_with_replies(VideoIds[i])
-
-for i in range(100, 150):
-    scrape_comments_with_replies(VideoIds[i])
-
-for i in range(150, 200):
-    scrape_comments_with_replies(VideoIds[i])
-
-for i in range(200, 250):
-    scrape_comments_with_replies(VideoIds[i])
-
-for i in range(250, 300):
-    scrape_comments_with_replies(VideoIds[i])
-
-for i in range(300, len(VideoIds)):
-    scrape_comments_with_replies(VideoIds[i])
-"""
